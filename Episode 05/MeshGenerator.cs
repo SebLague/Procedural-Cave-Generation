@@ -19,6 +19,11 @@ public class MeshGenerator : MonoBehaviour {
 		triangleDictionary.Clear ();
 		outlines.Clear ();
 		checkedVertices.Clear ();
+		
+		MeshCollider collider = gameObject.GetComponent(typeof(MeshCollider)) as MeshCollider;
+		if(collider != null){
+			Destroy (collider);
+		}
 
 		squareGrid = new SquareGrid(map, squareSize);
 
@@ -70,6 +75,9 @@ public class MeshGenerator : MonoBehaviour {
 		wallMesh.vertices = wallVertices.ToArray ();
 		wallMesh.triangles = wallTriangles.ToArray ();
 		walls.mesh = wallMesh;
+		
+		MeshCollider meshc = gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
+		meshc.sharedMesh = walls.mesh;
 	}
 
 	void TriangulateSquare(Square square) {
