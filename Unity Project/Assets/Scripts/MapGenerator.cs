@@ -289,7 +289,6 @@ public class MapGenerator : MonoBehaviour {
 
 
 	void RandomFillMap() {
-	
 		if (useRandomSeed) {
 			seed = Time.time.ToString();
 		}
