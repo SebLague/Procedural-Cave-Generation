@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -249,9 +249,9 @@ public class MeshGenerator : MonoBehaviour {
 		for (int outlineIndex = 0; outlineIndex < outlines.Count; outlineIndex ++) {
 			List<int> simplifiedOutline = new List<int>();
 			Vector3 dirOld = Vector3.zero;
-			for (int i = 0; i < outlines[outlineIndex].Count-1; i ++) {
+			for (int i = 0; i < outlines[outlineIndex].Count; i ++) {
 				Vector3 p1 = vertices[outlines[outlineIndex][i]];
-				Vector3 p2 = vertices[outlines[outlineIndex][i+1]];
+				Vector3 p2 = vertices[outlines[outlineIndex][(i+1)%outlines[outlineIndex].Count]];
 				Vector3 dir = p1-p2;
 				if (dir != dirOld) {
 					dirOld = dir;
