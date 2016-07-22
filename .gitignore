@@ -1,0 +1,43 @@
+##################
+# Unity ignores:
+#
+# !!! WARNING !!!
+#
+# … you MUST convert Unity to using Metafiles *before* you start using this
+#  .gitignore file, or you WILL lose data!
+#
+ 
+# OS X only:
+.DS_Store
+*.swp
+*.Trashes
+ 
+# All platforms:
+Library
+Temp
+obj
+*.csproj
+*.pidb
+*.unityproj
+*.sln
+*.userprefs
+*.suo
+*.pdb
+playing1/obj
+playing1server/bin
+
+Assembly-CSharp*
+deleteme*
+
+# cruft and test code:
+2DGameplayTutorialProject
+CacheServer
+NGUITest2
+Thumbs.db
+hwd082012
+square.x3d
+white disk.png
+examples
+~*.xls*
+RECOVER_master_cs5*
+PackageExperimenter
