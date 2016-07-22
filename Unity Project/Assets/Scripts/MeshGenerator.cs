@@ -2,22 +2,17 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MeshGenerator : MonoBehaviour {
-
-	public SquareGrid squareGrid;
-	public MeshFilter walls;
-	public MeshFilter cave;
-
-	public bool is2D;
-
-	List<Vector3> vertices;
+public class MeshGenerator
+{
+    SquareGrid squareGrid;
+    List<Vector3> vertices;
 	List<int> triangles;
 
 	Dictionary<int,List<Triangle>> triangleDictionary = new Dictionary<int, List<Triangle>> ();
 	List<List<int>> outlines = new List<List<int>> ();
 	HashSet<int> checkedVertices = new HashSet<int>();
 
-	public void GenerateMesh(int[,] map, float squareSize) {
+	public Mesh GenerateCaveMesh(int[,] map, float squareSize, bool generate2DCollider) {
 
 		triangleDictionary.Clear ();
 		outlines.Clear ();
@@ -35,8 +30,6 @@ public class MeshGenerator : MonoBehaviour {
 		}
 
 		Mesh mesh = new Mesh();
-		cave.mesh = mesh;
-
 		mesh.vertices = vertices.ToArray();
 		mesh.triangles = triangles.ToArray();
 		mesh.RecalculateNormals();
@@ -49,19 +42,10 @@ public class MeshGenerator : MonoBehaviour {
 			uvs[i] = new Vector2(percentX,percentY);
 		}
 		mesh.uv = uvs;
-	
-
-		if (is2D) {
-			Generate2DColliders();
-		} else {
-			CreateWallMesh ();
-		}
+        return mesh;
 	}
 
-	void CreateWallMesh() {
-
-		MeshCollider currentCollider = GetComponent<MeshCollider> ();
-		Destroy(currentCollider);
+	public Mesh CreateWallMesh() {
 
 		CalculateMeshOutlines ();
 
@@ -89,17 +73,14 @@ public class MeshGenerator : MonoBehaviour {
 		}
 		wallMesh.vertices = wallVertices.ToArray ();
 		wallMesh.triangles = wallTriangles.ToArray ();
-		walls.mesh = wallMesh;
 
-		MeshCollider wallCollider = gameObject.AddComponent<MeshCollider> ();
-		wallCollider.sharedMesh = wallMesh;
+        return wallMesh;
 	}
-
-	void Generate2DColliders() {
+	public void Generate2DColliders(GameObject gameObject) {
 
 		EdgeCollider2D[] currentColliders = gameObject.GetComponents<EdgeCollider2D> ();
 		for (int i = 0; i < currentColliders.Length; i++) {
-			Destroy(currentColliders[i]);
+			GameObject.DestroyImmediate(currentColliders[i]);
 		}
 
 		CalculateMeshOutlines ();
