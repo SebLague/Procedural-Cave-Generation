@@ -70,23 +70,44 @@ public class MeshGenerator : MonoBehaviour {
 		Mesh wallMesh = new Mesh ();
 		float wallHeight = 5;
 
-		foreach (List<int> outline in outlines) {
-			for (int i = 0; i < outline.Count -1; i ++) {
-				int startIndex = wallVertices.Count;
-				wallVertices.Add(vertices[outline[i]]); // left
-				wallVertices.Add(vertices[outline[i+1]]); // right
-				wallVertices.Add(vertices[outline[i]] - Vector3.up * wallHeight); // bottom left
-				wallVertices.Add(vertices[outline[i+1]] - Vector3.up * wallHeight); // bottom right
-
-				wallTriangles.Add(startIndex + 0);
-				wallTriangles.Add(startIndex + 2);
-				wallTriangles.Add(startIndex + 3);
-
-				wallTriangles.Add(startIndex + 3);
-				wallTriangles.Add(startIndex + 1);
-				wallTriangles.Add(startIndex + 0);
-			}
-		}
+		for( int outlineCount = 0; outlineCount < outlines.Count; outlineCount++ ) {
+	            List<int> outline = outlines[outlineCount];
+	            for (int i = 0; i < outline.Count-1; i ++) {
+	                int startIndex = wallVertices.Count;
+	                wallVertices.Add(vertices[outline[i]]); // left
+	                wallVertices.Add(vertices[outline[i+1]]); // right
+	                wallVertices.Add(vertices[outline[i]] - Vector3.up * wallHeight); // bottom left
+	                wallVertices.Add(vertices[outline[i+1]] - Vector3.up * wallHeight); // bottom right
+	
+	                wallTriangles.Add(startIndex + 0);
+	                wallTriangles.Add(startIndex + 2);
+	                wallTriangles.Add(startIndex + 3);
+	
+	                wallTriangles.Add(startIndex + 3);
+	                wallTriangles.Add(startIndex + 1);
+	                wallTriangles.Add(startIndex + 0);
+	
+	                // on the last time through this outline loop, connect the first/last vertices (close the gap)
+	                if( i + 1 >= outline.Count-1 )
+	                {
+	                    startIndex = wallVertices.Count;
+	
+	                    wallVertices.Add(vertices[outline[0]] - Vector3.up * wallHeight); // bottom left
+	                    wallVertices.Add(vertices[outline[i+1]] - Vector3.up * wallHeight); // bottom right
+	                    wallVertices.Add(vertices[outline[0]]); // left
+	                    wallVertices.Add(vertices[outline[i+1]]); // right
+	
+	                    wallTriangles.Add(startIndex + 0);
+	                    wallTriangles.Add(startIndex + 2);
+	                    wallTriangles.Add(startIndex + 3);
+	
+	                    wallTriangles.Add(startIndex + 3);
+	                    wallTriangles.Add(startIndex + 1);
+	                    wallTriangles.Add(startIndex + 0);
+	                }
+	            }
+	        }
+		    
 		wallMesh.vertices = wallVertices.ToArray ();
 		wallMesh.triangles = wallTriangles.ToArray ();
 		walls.mesh = wallMesh;
